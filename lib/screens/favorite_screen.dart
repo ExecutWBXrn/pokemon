@@ -7,49 +7,58 @@ import 'package:hive_flutter/hive_flutter.dart';
 class FavoritePokemons extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Center(
-      child: ValueListenableBuilder(
-        valueListenable: Hive.box<Pokemon>('poke_favorite').listenable(),
-        builder: (context, box, _) {
-          final pokemons = box.values.toList();
+    final AsyncValue<List<Pokemon>> pokemonAsync = ref.watch(
+      favotiresStreamProvider,
+    );
 
-          return ListView.builder(
-            itemCount: pokemons.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                leading: Hero(
-                  tag: 'avatar-${pokemons[index].id}-flist',
-                  child: Image.network(
-                    pokemons[index].img,
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return Center(child: CircularProgressIndicator());
-                    },
-                    errorBuilder: (context, error, stackTrace) {
-                      return Icon(Icons.image_not_supported_outlined);
-                    },
+    return Center(
+      child: pokemonAsync.when(
+        data: (pokemons) {
+          return Center(
+            child: ListView.builder(
+              itemCount: pokemons.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  leading: Hero(
+                    tag: 'avatar-${pokemons[index].id}-flist',
+                    child: Image.network(
+                      pokemons[index].img,
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Center(child: CircularProgressIndicator());
+                      },
+                      errorBuilder: (context, error, stackTrace) {
+                        return Icon(Icons.image_not_supported_outlined);
+                      },
+                    ),
                   ),
-                ),
-                title: Text(
-                  pokemons[index].name.toUpperCase(),
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
+                  title: Text(
+                    pokemons[index].name.toUpperCase(),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                ),
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    '/info',
-                    arguments: <String, String>{
-                      'pokeId': pokemons[index].id,
-                      'pageFrom': 'flist',
-                    },
-                  );
-                },
-              );
-            },
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      '/info',
+                      arguments: <String, String>{
+                        'pokeId': pokemons[index].id,
+                        'pageFrom': 'flist',
+                      },
+                    );
+                  },
+                );
+              },
+            ),
           );
+        },
+        error: (e, s) {
+          return const Center(child: Text("data"));
+        },
+        loading: () {
+          return const CircularProgressIndicator();
         },
       ),
     );
