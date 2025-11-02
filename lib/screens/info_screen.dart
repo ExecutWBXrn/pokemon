@@ -1,5 +1,6 @@
 // libs
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -7,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:pokemon/blogic/pokemon.dart';
 import 'package:pokemon/blogic/pokemon_provider.dart';
+import 'package:pokemon/blogic/favorite_pokemon_provider.dart';
 
 class InfoPage extends ConsumerWidget {
   @override
@@ -23,6 +25,7 @@ class InfoPage extends ConsumerWidget {
     }
 
     final String? pokeId = args['pokeId'];
+    final String? pageFrom = args['pageFrom'];
 
     if (pokeId == null) {
       return Scaffold(
@@ -31,9 +34,32 @@ class InfoPage extends ConsumerWidget {
       );
     }
 
-    final AsyncValue<Pokemon?> pokemonAsync = ref.watch(
-      pokemonProvider(pokeId),
+    ref.listen(pokemonProvider(pokeId), (previous, next) {
+      if (next is AsyncError && (previous is! AsyncError)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Помилка завантаження'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+
+      if (next is AsyncData && next.value == null) {
+        showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: const Text('Not found'),
+            content: const Text('Такого покемона не існує'),
+          ),
+        );
+      }
+    });
+
+    final AsyncValue<Pokemon?> AsyncHivePokemon = ref.watch(
+      favoritePokeProvider(pokeId),
     );
+
+    final favoriteNotifier = ref.read(favoriteRepositoryProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -51,19 +77,41 @@ class InfoPage extends ConsumerWidget {
       ),
       backgroundColor: Colors.grey.shade800,
       body: Center(
-        child: pokemonAsync.when(
+        child: AsyncHivePokemon.when(
           data: (data) {
             if (data == null) {
-              return Center(
-                child: Text("Не вдалося завантажити дані про покемона"),
+              final AsyncValue<Pokemon?> pokemonAsync = ref.watch(
+                pokemonProvider(pokeId),
+              );
+              pokemonAsync.when(
+                data: (dataFetched) {
+                  print("Data fetched");
+                  if (dataFetched == null) {
+                    return Center(
+                      child: Text("Не вдалось завантажити дані про покемона"),
+                    );
+                  }
+                  data = dataFetched;
+                },
+                error: (e, s) {
+                  print("Error fetching data");
+                },
+                loading: () {
+                  print("Trying to fetch data from API");
+                },
               );
             }
+
+            if (data == null) {
+              return CircularProgressIndicator();
+            }
+
             return Column(
               children: [
                 Hero(
-                  tag: 'avatar-$pokeId',
+                  tag: 'avatar-$pokeId-$pageFrom',
                   child: Image.network(
-                    data.bigImg ?? data.img,
+                    data!.bigImg ?? data!.img,
                     loadingBuilder:
                         (
                           BuildContext context,
@@ -83,6 +131,12 @@ class InfoPage extends ConsumerWidget {
                             ),
                           );
                         },
+                    errorBuilder: (context, error, stackTrace) {
+                      return Icon(
+                        Icons.image_not_supported_outlined,
+                        size: 300,
+                      );
+                    },
                   ),
                 ),
                 Padding(
@@ -101,7 +155,7 @@ class InfoPage extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          "Name: ${data.name.toUpperCase()}",
+                          "Name: ${data!.name.toUpperCase()}",
                           maxLines: 3,
                           overflow: TextOverflow.fade,
                           style: TextStyle(
@@ -110,12 +164,59 @@ class InfoPage extends ConsumerWidget {
                             fontSize: 25,
                           ),
                         ),
-                        const SizedBox(height: 40),
+                        const SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                if (data!.isFavorite) {
+                                  favoriteNotifier.deletePokeName(data!.id);
+                                } else {
+                                  favoriteNotifier.savePokeName(
+                                    data!.copyWith(isFavorite: true),
+                                  );
+                                }
+                                ref.refresh(favoritePokeProvider(data!.id));
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        data!.isFavorite
+                                            ? "${data!.name} removed from favorite!"
+                                            : "${data!.name} added to favorite!",
+                                      ),
+                                      backgroundColor: Colors.green,
+                                      duration: const Duration(
+                                        milliseconds: 800,
+                                      ),
+                                    ),
+                                    snackBarAnimationStyle: AnimationStyle(
+                                      duration: const Duration(
+                                        milliseconds: 500,
+                                      ),
+                                    ),
+                                  );
+                                }
+                              },
+                              icon: Icon(
+                                data!.isFavorite
+                                    ? Icons.favorite
+                                    : Icons.favorite_border,
+                                size: 40,
+                                color: data!.isFavorite
+                                    ? Colors.red
+                                    : Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "Height: ${data.height}0 cm",
+                              "Height: ${data!.height}0 cm",
                               style: TextStyle(
                                 color: Colors.lightBlueAccent,
                                 fontSize: 16,
@@ -123,7 +224,7 @@ class InfoPage extends ConsumerWidget {
                               ),
                             ),
                             Text(
-                              "Weight: ${data.weight! / 10} kg",
+                              "Weight: ${data!.weight! / 10} kg",
                               style: TextStyle(
                                 color: Colors.lightBlueAccent,
                                 fontSize: 16,

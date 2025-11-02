@@ -3,18 +3,29 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 
-
 // BLOGIC
 
-import 'package:pokemon/blogic/pokemon.dart';
-import 'package:pokemon/blogic/pokemon_provider.dart';
+import 'package:pokemon/blogic/bottom_nav_provider.dart';
 
+// pages
 
-class HomePage extends ConsumerWidget {
+import 'package:pokemon/screens/poke_list_screen.dart';
+import 'package:pokemon/screens/favorite_screen.dart';
+
+class HomePage extends ConsumerStatefulWidget {
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncValue<List<Pokemon>> allPokemonList = ref.watch(
-      allPokemonsProvider,
+  ConsumerState<ConsumerStatefulWidget> createState() {
+    return _HomePageState();
+  }
+}
+
+class _HomePageState extends ConsumerState<HomePage> {
+  @override
+  Widget build(BuildContext context) {
+    final BottomIndex bottomIndexState = ref.watch(bottomIndexProvider);
+
+    final BottomIndexNotifier bottomIndex = ref.watch(
+      bottomIndexProvider.notifier,
     );
 
     return Scaffold(
@@ -32,45 +43,30 @@ class HomePage extends ConsumerWidget {
           ),
         ),
       ),
-      body: Center(
-        child: allPokemonList.when(
-          data: (data) {
-            return ListView.builder(
-              itemCount: allPokemonList.value?.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  leading: Hero(
-                    tag: 'avatar-${allPokemonList.value![index].id}',
-                    child: Image.network(allPokemonList.value![index].img),
-                  ),
-                  title: Text(
-                    allPokemonList.value![index].name.toUpperCase(),
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      '/info',
-                      arguments: <String, String>{
-                        'pokeId': allPokemonList.value![index].id,
-                      },
-                    );
-                  },
-                );
-              },
-            );
-          },
-          error: (error, stack) {
-            print("$error");
-            return const Text("No pokemons today");
-          },
-          loading: () {
-            return const CircularProgressIndicator();
-          },
+      body: IndexedStack(
+        index: bottomIndexState.index,
+        children: [PokeListScreen(), FavoritePokemons()],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.grey.shade900,
+        unselectedItemColor: Colors.grey,
+        selectedItemColor: Colors.yellow,
+        selectedIconTheme: IconThemeData(
+          size: 30,
+          shadows: [Shadow(color: Colors.blue, blurRadius: 25)],
         ),
+        currentIndex: bottomIndexState.index,
+        onTap: bottomIndex.setIndex,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_balance),
+            label: "Pokemons",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite),
+            label: "Favorite",
+          ),
+        ],
       ),
     );
   }

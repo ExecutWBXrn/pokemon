@@ -1,10 +1,22 @@
+import 'package:hive_flutter/hive_flutter.dart';
+part 'pokemon.g.dart';
+
+@HiveType(typeId: 0)
 class Pokemon {
+  @HiveField(0)
   final String id;
+  @HiveField(1)
   final String name;
+  @HiveField(2)
   final String img;
+  @HiveField(3)
   final String? bigImg;
+  @HiveField(4)
   final int? height;
+  @HiveField(5)
   final int? weight;
+  @HiveField(6)
+  final bool isFavorite;
 
   Pokemon({
     required this.id,
@@ -13,7 +25,28 @@ class Pokemon {
     this.bigImg,
     this.height,
     this.weight,
+    this.isFavorite = false,
   });
+
+  Pokemon copyWith({
+    String? id,
+    String? name,
+    String? img,
+    String? bigImg,
+    int? height,
+    int? weight,
+    bool isFavorite = false,
+  }) {
+    return Pokemon(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      img: img ?? this.img,
+      bigImg: bigImg ?? this.bigImg,
+      height: height ?? this.height,
+      weight: weight ?? this.weight,
+      isFavorite: isFavorite,
+    );
+  }
 
   factory Pokemon.fromJson(Map<String, dynamic> json) {
     return Pokemon(
