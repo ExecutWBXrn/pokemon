@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pokemon/blogic/favorite_pokemon_provider.dart';
-import 'package:pokemon/blogic/pokemon.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:pokemon/core/domain/entities/pokemon_entity.dart';
+import 'package:pokemon/core/providers/favorite_pokemon_provider.dart';
 
 class FavoritePokemons extends ConsumerWidget {
+  const FavoritePokemons({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncValue<List<Pokemon>> pokemonAsync = ref.watch(
+    final AsyncValue<List<PokemonEntity>> pokemonAsync = ref.watch(
       favotiresStreamProvider,
     );
 

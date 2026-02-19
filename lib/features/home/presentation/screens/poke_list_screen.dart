@@ -1,14 +1,11 @@
-// libs
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
-
-// BLOGIC
-
-import 'package:pokemon/blogic/pokemon.dart';
-import 'package:pokemon/blogic/pokemon_provider.dart';
+import 'package:pokemon/core/domain/entities/pokemon_entity.dart';
+import 'package:pokemon/features/home/presentation/providers/poke_providers.dart';
 
 class PokeListScreen extends ConsumerStatefulWidget {
+  const PokeListScreen({super.key});
+
   @override
   ConsumerState<ConsumerStatefulWidget> createState() {
     return _PokeListScreenState();
@@ -18,8 +15,8 @@ class PokeListScreen extends ConsumerStatefulWidget {
 class _PokeListScreenState extends ConsumerState<PokeListScreen> {
   @override
   Widget build(BuildContext context) {
-    final AsyncValue<List<Pokemon>> allPokemonList = ref.watch(
-      allPokemonsProvider,
+    final AsyncValue<List<PokemonEntity>> allPokemonList = ref.watch(
+      fetchAllPokemonsProvider,
     );
 
     return Center(

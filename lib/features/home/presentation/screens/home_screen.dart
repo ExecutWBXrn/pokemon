@@ -1,18 +1,12 @@
-// libs
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
-
-// BLOGIC
-
-import 'package:pokemon/blogic/bottom_nav_provider.dart';
-
-// pages
-
-import 'package:pokemon/screens/poke_list_screen.dart';
-import 'package:pokemon/screens/favorite_screen.dart';
+import 'package:pokemon/features/home/presentation/screens/poke_list_screen.dart';
+import 'package:pokemon/features/favorite/presentation/screens/favorite_screen.dart';
+import '../providers/providers.dart';
 
 class HomePage extends ConsumerStatefulWidget {
+  const HomePage({super.key});
+
   @override
   ConsumerState<ConsumerStatefulWidget> createState() {
     return _HomePageState();
@@ -22,11 +16,9 @@ class HomePage extends ConsumerStatefulWidget {
 class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
-    final BottomIndex bottomIndexState = ref.watch(bottomIndexProvider);
+    final int bottomIndexValue = ref.watch(bottomIndexProvider);
 
-    final BottomIndexNotifier bottomIndex = ref.watch(
-      bottomIndexProvider.notifier,
-    );
+    final bottomIndexState = ref.read(bottomIndexProvider.notifier);
 
     return Scaffold(
       backgroundColor: Colors.grey.shade800,
@@ -44,7 +36,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         ),
       ),
       body: IndexedStack(
-        index: bottomIndexState.index,
+        index: bottomIndexValue,
         children: [PokeListScreen(), FavoritePokemons()],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -55,8 +47,10 @@ class _HomePageState extends ConsumerState<HomePage> {
           size: 30,
           shadows: [Shadow(color: Colors.blue, blurRadius: 25)],
         ),
-        currentIndex: bottomIndexState.index,
-        onTap: bottomIndex.setIndex,
+        currentIndex: bottomIndexValue,
+        onTap: (index) {
+          bottomIndexState.state = index;
+        },
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.account_balance),

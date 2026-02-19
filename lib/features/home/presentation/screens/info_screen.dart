@@ -1,16 +1,12 @@
-// libs
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-// BLOGIC
-
-import 'package:pokemon/blogic/pokemon.dart';
-import 'package:pokemon/blogic/pokemon_provider.dart';
-import 'package:pokemon/blogic/favorite_pokemon_provider.dart';
+import 'package:pokemon/core/domain/entities/pokemon_entity.dart';
+import '../providers/poke_providers.dart';
+import 'package:pokemon/core/providers/favorite_pokemon_provider.dart';
 
 class InfoPage extends ConsumerWidget {
+  const InfoPage({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final args = ModalRoute.of(context)?.settings.arguments;
@@ -34,7 +30,7 @@ class InfoPage extends ConsumerWidget {
       );
     }
 
-    ref.listen(pokemonProvider(pokeId), (previous, next) {
+    ref.listen(fetchPokemonByIdProvider(pokeId), (previous, next) {
       if (next is AsyncError && (previous is! AsyncError)) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -55,7 +51,7 @@ class InfoPage extends ConsumerWidget {
       }
     });
 
-    final AsyncValue<Pokemon?> AsyncHivePokemon = ref.watch(
+    final AsyncValue<PokemonEntity?> asyncHivePokemon = ref.watch(
       favoritePokeProvider(pokeId),
     );
 
@@ -77,11 +73,11 @@ class InfoPage extends ConsumerWidget {
       ),
       backgroundColor: Colors.grey.shade800,
       body: Center(
-        child: AsyncHivePokemon.when(
+        child: asyncHivePokemon.when(
           data: (data) {
             if (data == null) {
-              final AsyncValue<Pokemon?> pokemonAsync = ref.watch(
-                pokemonProvider(pokeId),
+              final AsyncValue<PokemonEntity?> pokemonAsync = ref.watch(
+                fetchPokemonByIdProvider(pokeId),
               );
               pokemonAsync.when(
                 data: (dataFetched) {

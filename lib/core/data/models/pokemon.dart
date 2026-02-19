@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:hive_flutter/hive_flutter.dart';
+import '../../domain/entities/pokemon_entity.dart';
 part 'pokemon.g.dart';
 
 @HiveType(typeId: 0)
@@ -67,6 +70,30 @@ class Pokemon {
       name: json['name'].toString().replaceAll("-", " "),
       img:
           "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$id.png",
+    );
+  }
+
+  PokemonEntity toEntity() {
+    return PokemonEntity(
+      id: id,
+      name: name,
+      img: img,
+      bigImg: bigImg,
+      height: height,
+      weight: weight,
+      isFavorite: isFavorite,
+    );
+  }
+
+  factory Pokemon.fromEntity(PokemonEntity entity) {
+    return Pokemon(
+      id: entity.id,
+      name: entity.name,
+      img: entity.img,
+      bigImg: entity.bigImg,
+      height: entity.height,
+      weight: entity.weight,
+      isFavorite: entity.isFavorite,
     );
   }
 }
