@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
-import 'package:pokemon/core/data/models/pokemon.dart';
-
+import '/core/data/models/pokemon.dart';
+import '/core/exceptions/cache_exception.dart';
 import './favorite_hive_local_ds.dart';
 
 class FavoriteHiveLocalDsImpl extends FavoriteHiveLocalDs {
@@ -12,17 +12,21 @@ class FavoriteHiveLocalDsImpl extends FavoriteHiveLocalDs {
   Future<void> deletePokeName(String id) async {
     try {
       await _box.delete(id);
-    } catch (_) {
-      rethrow;
+    } on HiveError catch (e) {
+      throw CacheException(e.message);
+    } catch (e) {
+      throw CacheException('Unknown error');
     }
   }
 
   @override
-  Future<Pokemon?> getPokeName(String id) async {
+  Pokemon? getPokeName(String id) {
     try {
       return _box.get(id);
-    } catch (_) {
-      rethrow;
+    } on HiveError catch (e) {
+      throw CacheException(e.message);
+    } catch (e) {
+      throw CacheException('Unknown error');
     }
   }
 
@@ -30,8 +34,10 @@ class FavoriteHiveLocalDsImpl extends FavoriteHiveLocalDs {
   List<Pokemon> getinitialFavorites() {
     try {
       return _box.values.toList();
-    } catch (_) {
-      rethrow;
+    } on HiveError catch (e) {
+      throw CacheException(e.message);
+    } catch (e) {
+      throw CacheException('Unknown error');
     }
   }
 
@@ -39,8 +45,10 @@ class FavoriteHiveLocalDsImpl extends FavoriteHiveLocalDs {
   Future<void> savePokeName(Pokemon poke) async {
     try {
       await _box.put(poke.id, poke);
-    } catch (_) {
-      rethrow;
+    } on HiveError catch (e) {
+      throw CacheException(e.message);
+    } catch (e) {
+      throw CacheException('Unknown error');
     }
   }
 
@@ -50,8 +58,10 @@ class FavoriteHiveLocalDsImpl extends FavoriteHiveLocalDs {
       return _box.watch().map((event) {
         return _box.values.toList();
       });
-    } catch (_) {
-      rethrow;
+    } on HiveError catch (e) {
+      throw CacheException(e.message);
+    } catch (e) {
+      throw CacheException('Unknown error');
     }
   }
 }
