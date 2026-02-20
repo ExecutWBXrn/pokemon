@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pokemon/core/data/models/pokemon.dart';
+import 'package:pokemon/shared/data/models/pokemon.dart';
 
 void main() {
   test('Pokemon fromJson should correctly parse a map', () {

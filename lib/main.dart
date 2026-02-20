@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:pokemon/features/home/presentation/screens/home_screen.dart';
 import 'package:pokemon/features/home/presentation/screens/info_screen.dart';
-import '/core/data/models/pokemon.dart';
+import '/shared/data/models/pokemon.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

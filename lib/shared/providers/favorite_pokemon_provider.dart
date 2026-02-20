@@ -2,9 +2,9 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/datasource/local/favorite_hive_local_ds.dart';
 import '../data/datasource/local/favorite_hive_local_ds_impl.dart';
-import '/core/domain/entities/pokemon_entity.dart';
-import '/core/domain/repos/favorite_repo.dart';
-import '/core/data/repos_impl/favorite_repo_impl.dart';
+import '/shared/domain/entities/pokemon_entity.dart';
+import '/shared/domain/repos/favorite_repo.dart';
+import '/shared/data/repos_impl/favorite_repo_impl.dart';
 import './box_provider.dart';
 
 final favoriteHiveDataSourceProvider = Provider<FavoriteHiveLocalDs>(

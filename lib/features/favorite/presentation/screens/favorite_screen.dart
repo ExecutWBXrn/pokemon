@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pokemon/core/domain/entities/pokemon_entity.dart';
-import 'package:pokemon/core/providers/favorite_pokemon_provider.dart';
+import 'package:pokemon/shared/domain/entities/pokemon_entity.dart';
+import 'package:pokemon/core/failure/cache_failure.dart';
+import 'package:pokemon/shared/providers/favorite_pokemon_provider.dart';
 
 class FavoritePokemons extends ConsumerWidget {
   const FavoritePokemons({super.key});
@@ -56,7 +57,23 @@ class FavoritePokemons extends ConsumerWidget {
           );
         },
         error: (e, s) {
-          return const Center(child: Text("data"));
+          String message = "Error occurred!";
+
+          if (e is CacheFailure) {
+            message = e.message;
+          }
+
+          return Column(
+            children: [
+              Text(message),
+              ElevatedButton(
+                onPressed: () {
+                  ref.invalidate(favotiresStreamProvider);
+                },
+                child: Text("Press to refresh"),
+              ),
+            ],
+          );
         },
         loading: () {
           return const CircularProgressIndicator();

@@ -1,4 +1,4 @@
-import '/core/domain/entities/pokemon_entity.dart';
+import '/shared/domain/entities/pokemon_entity.dart';
 import '../repos/pokemon_repo.dart';
 
 class FetchPokemonByIdUseCase {

@@ -1,6 +1,6 @@
-import 'package:pokemon/core/domain/entities/pokemon_entity.dart';
+import 'package:pokemon/shared/domain/entities/pokemon_entity.dart';
 
-import '/core/data/models/pokemon.dart';
+import '/shared/data/models/pokemon.dart';
 
 abstract class PokemonRepo {
   Future<List<PokemonEntity>> getAllPokemons();
