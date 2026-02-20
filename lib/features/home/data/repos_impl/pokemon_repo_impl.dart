@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:pokemon/core/domain/entities/pokemon_entity.dart';
+import 'package:pokemon/shared/domain/entities/pokemon_entity.dart';
 import '../datasource/remote/poke_remote_ds.dart';
 import '../../domain/repos/pokemon_repo.dart';
 

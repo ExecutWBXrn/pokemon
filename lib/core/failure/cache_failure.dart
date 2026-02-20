@@ -1,4 +1,4 @@
-import '../domain/failure/failure.dart';
+import '/shared/domain/failure/failure.dart';
 
 class CacheFailure implements Failure {
   final String message;

@@ -1,5 +1,5 @@
-import '/core/data/models/pokemon.dart';
-import '/core/domain/entities/pokemon_entity.dart';
+import '/shared/data/models/pokemon.dart';
+import '/shared/domain/entities/pokemon_entity.dart';
 import '../repos/pokemon_repo.dart';
 
 class FetchAllPokemonsUseCase {

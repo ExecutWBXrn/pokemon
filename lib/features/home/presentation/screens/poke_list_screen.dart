@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
-import 'package:pokemon/core/domain/entities/pokemon_entity.dart';
+import 'package:pokemon/shared/domain/entities/pokemon_entity.dart';
 import 'package:pokemon/features/home/presentation/providers/poke_providers.dart';
 
 class PokeListScreen extends ConsumerStatefulWidget {

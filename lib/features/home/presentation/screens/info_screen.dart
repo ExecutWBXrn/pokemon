@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pokemon/core/domain/entities/pokemon_entity.dart';
+import 'package:pokemon/shared/domain/entities/pokemon_entity.dart';
 import '../providers/poke_providers.dart';
-import 'package:pokemon/core/providers/favorite_pokemon_provider.dart';
+import 'package:pokemon/shared/providers/favorite_pokemon_provider.dart';
 
 class InfoPage extends ConsumerWidget {
   const InfoPage({super.key});

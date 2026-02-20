@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:pokemon/core/data/models/pokemon.dart';
+import 'package:pokemon/shared/data/models/pokemon.dart';
 import 'poke_remote_ds.dart';
 
 class PokeRemoteDsImpl implements PokeRemoteDs {

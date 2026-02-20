@@ -1,4 +1,4 @@
-import '/core/data/models/pokemon.dart';
+import '/shared/data/models/pokemon.dart';
 
 abstract class PokeRemoteDs {
   Future<List<Pokemon>> getAllPokemons();

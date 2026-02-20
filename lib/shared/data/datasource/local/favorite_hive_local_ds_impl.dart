@@ -1,7 +1,7 @@
 import 'package:hive/hive.dart';
-import '/core/data/models/pokemon.dart';
+import '/shared/data/models/pokemon.dart';
 import '/core/exceptions/cache_exception.dart';
-import './favorite_hive_local_ds.dart';
+import 'favorite_hive_local_ds.dart';
 
 class FavoriteHiveLocalDsImpl extends FavoriteHiveLocalDs {
   final Box<Pokemon> _box;

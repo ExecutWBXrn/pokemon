@@ -1,4 +1,4 @@
-import 'package:pokemon/core/domain/entities/pokemon_entity.dart';
+import 'package:pokemon/shared/domain/entities/pokemon_entity.dart';
 
 abstract class FavoriteRepo {
   Future<void> savePokeName(PokemonEntity poke);

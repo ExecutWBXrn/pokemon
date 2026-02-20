@@ -1,7 +1,7 @@
-import 'package:pokemon/core/domain/entities/pokemon_entity.dart';
+import 'package:pokemon/shared/domain/entities/pokemon_entity.dart';
 import 'package:pokemon/core/failure/cache_failure.dart';
 import '../../domain/repos/favorite_repo.dart';
-import 'package:pokemon/core/data/datasource/local/favorite_hive_local_ds.dart';
+import 'package:pokemon/shared/data/datasource/local/favorite_hive_local_ds.dart';
 import 'package:pokemon/core/exceptions/cache_exception.dart';
 import '../models/pokemon.dart';
 
