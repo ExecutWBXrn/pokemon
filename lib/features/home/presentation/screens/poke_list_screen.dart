@@ -26,17 +26,21 @@ class _PokeListScreenState extends ConsumerState<PokeListScreen> {
             itemCount: allPokemonList.value?.length,
             itemBuilder: (context, index) {
               return ListTile(
-                leading: Hero(
-                  tag: 'avatar-${allPokemonList.value![index].id}-plist',
-                  child: Image.network(
-                    allPokemonList.value![index].img,
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return Center(child: CircularProgressIndicator());
-                    },
-                    errorBuilder: (context, error, stackTrace) {
-                      return Icon(Icons.image_not_supported_outlined);
-                    },
+                leading: SizedBox(
+                  width: 50,
+                  child: Hero(
+                    tag: 'avatar-${allPokemonList.value![index].id}-plist',
+                    child: Image.network(
+                      fit: BoxFit.fill,
+                      allPokemonList.value![index].img,
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Center(child: CircularProgressIndicator());
+                      },
+                      errorBuilder: (context, error, stackTrace) {
+                        return Icon(Icons.image_not_supported_outlined);
+                      },
+                    ),
                   ),
                 ),
                 title: Text(
@@ -61,7 +65,6 @@ class _PokeListScreenState extends ConsumerState<PokeListScreen> {
           );
         },
         error: (error, stack) {
-          print("$error");
           return const Text("No pokemons today");
         },
         loading: () {

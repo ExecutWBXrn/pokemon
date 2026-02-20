@@ -81,7 +81,6 @@ class InfoPage extends ConsumerWidget {
               );
               pokemonAsync.when(
                 data: (dataFetched) {
-                  print("Data fetched");
                   if (dataFetched == null) {
                     return Center(
                       child: Text("Не вдалось завантажити дані про покемона"),
@@ -89,12 +88,8 @@ class InfoPage extends ConsumerWidget {
                   }
                   data = dataFetched;
                 },
-                error: (e, s) {
-                  print("Error fetching data");
-                },
-                loading: () {
-                  print("Trying to fetch data from API");
-                },
+                error: (e, s) {},
+                loading: () {},
               );
             }
 
@@ -237,7 +232,6 @@ class InfoPage extends ConsumerWidget {
             );
           },
           error: (error, s) {
-            print("Error: $error, $s");
             return const Text("Some error occurred");
           },
           loading: () {

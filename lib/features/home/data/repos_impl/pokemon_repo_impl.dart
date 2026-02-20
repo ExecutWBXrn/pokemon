@@ -14,7 +14,6 @@ class PokemonRepoImpl implements PokemonRepo {
       final pokeModels = await _remoteDs.getAllPokemons();
       return pokeModels.map((model) => model.toEntity()).toList();
     } on DioException catch (e) {
-      print(e.message);
       rethrow;
     }
   }
@@ -25,7 +24,6 @@ class PokemonRepoImpl implements PokemonRepo {
       final pokeModel = await _remoteDs.getPokemonById(id);
       return pokeModel?.toEntity();
     } on DioException catch (e) {
-      print(e.message);
       rethrow;
     }
   }
