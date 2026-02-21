@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pokemon/shared/domain/entities/pokemon_entity.dart';
 import '../providers/poke_providers.dart';
 import 'package:pokemon/shared/providers/favorite_pokemon_provider.dart';
+import 'package:pokemon/shared/mappers/network_exception_to_message_mapper.dart';
 
 class InfoPage extends ConsumerWidget {
   const InfoPage({super.key});
@@ -232,7 +233,7 @@ class InfoPage extends ConsumerWidget {
             );
           },
           error: (error, s) {
-            return const Text("Some error occurred");
+            return Text(NetworkExceptionToMessageMapper.map(error));
           },
           loading: () {
             return CircularProgressIndicator();

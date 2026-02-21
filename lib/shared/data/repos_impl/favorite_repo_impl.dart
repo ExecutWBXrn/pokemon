@@ -1,8 +1,7 @@
 import 'package:pokemon/shared/domain/entities/pokemon_entity.dart';
-import 'package:pokemon/core/failure/cache_failure.dart';
 import '../../domain/repos/favorite_repo.dart';
 import 'package:pokemon/shared/data/datasource/local/favorite_hive_local_ds.dart';
-import 'package:pokemon/core/exceptions/cache_exception.dart';
+import 'package:pokemon/shared/data/exceptions/cache_exception.dart';
 import '../models/pokemon.dart';
 
 class FavoriteRepoImpl extends FavoriteRepo {
@@ -15,7 +14,7 @@ class FavoriteRepoImpl extends FavoriteRepo {
     try {
       await _localHiveDs.deletePokeName(id);
     } on CacheException catch (e) {
-      throw CacheFailure(e.message);
+      throw CacheException(e.message);
     }
   }
 
@@ -25,17 +24,17 @@ class FavoriteRepoImpl extends FavoriteRepo {
       final model = _localHiveDs.getPokeName(id);
       return model?.toEntity();
     } on CacheException catch (e) {
-      throw CacheFailure(e.message);
+      throw CacheException(e.message);
     }
   }
 
   @override
-  List<PokemonEntity> getinitialFavorites() {
+  List<PokemonEntity> getInitialFavorites() {
     try {
-      final modelList = _localHiveDs.getinitialFavorites();
+      final modelList = _localHiveDs.getInitialFavorites();
       return modelList.map((model) => model.toEntity()).toList();
     } on CacheException catch (e) {
-      throw CacheFailure(e.message);
+      throw CacheException(e.message);
     }
   }
 
@@ -44,7 +43,7 @@ class FavoriteRepoImpl extends FavoriteRepo {
     try {
       _localHiveDs.savePokeName(Pokemon.fromEntity(poke));
     } on CacheException catch (e) {
-      throw CacheFailure(e.message);
+      throw CacheException(e.message);
     }
   }
 
@@ -56,7 +55,7 @@ class FavoriteRepoImpl extends FavoriteRepo {
         return modelList.map((model) => model.toEntity()).toList();
       });
     } on CacheException catch (e) {
-      throw CacheFailure(e.message);
+      throw CacheException(e.message);
     }
   }
 }

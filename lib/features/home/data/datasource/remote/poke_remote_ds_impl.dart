@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:pokemon/shared/data/models/pokemon.dart';
 import 'poke_remote_ds.dart';
+import 'package:pokemon/shared/data/exceptions/network_exception.dart';
+import '../../mappers/dio_exception_to_network_enum_mapper.dart';
 
 class PokeRemoteDsImpl implements PokeRemoteDs {
   final Dio _dioInstance;
@@ -23,8 +25,8 @@ class PokeRemoteDsImpl implements PokeRemoteDs {
         }
       }
       return allPokemons;
-    } catch (_) {
-      rethrow;
+    } on DioException catch (e, st) {
+      throw NetworkException(DioExceptionToNetworkEnumMapper.map(e));
     }
   }
 
@@ -41,8 +43,8 @@ class PokeRemoteDsImpl implements PokeRemoteDs {
       }
 
       return pokemon;
-    } catch (_) {
-      rethrow;
+    } on DioException catch (e, st) {
+      throw NetworkException(DioExceptionToNetworkEnumMapper.map(e));
     }
   }
 }

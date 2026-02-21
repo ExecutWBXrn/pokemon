@@ -9,5 +9,5 @@ abstract class FavoriteRepo {
 
   Stream<List<PokemonEntity>> watchPokemon();
 
-  List<PokemonEntity> getinitialFavorites();
+  List<PokemonEntity> getInitialFavorites();
 }

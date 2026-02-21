@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
 import '/shared/data/models/pokemon.dart';
-import '/core/exceptions/cache_exception.dart';
+import '../../exceptions/cache_exception.dart';
 import 'favorite_hive_local_ds.dart';
 
 class FavoriteHiveLocalDsImpl extends FavoriteHiveLocalDs {
@@ -31,7 +31,7 @@ class FavoriteHiveLocalDsImpl extends FavoriteHiveLocalDs {
   }
 
   @override
-  List<Pokemon> getinitialFavorites() {
+  List<Pokemon> getInitialFavorites() {
     try {
       return _box.values.toList();
     } on HiveError catch (e) {

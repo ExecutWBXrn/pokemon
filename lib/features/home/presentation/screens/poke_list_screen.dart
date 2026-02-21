@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:pokemon/shared/domain/entities/pokemon_entity.dart';
 import 'package:pokemon/features/home/presentation/providers/poke_providers.dart';
+import 'package:pokemon/shared/mappers/network_exception_to_message_mapper.dart';
 
 class PokeListScreen extends ConsumerStatefulWidget {
   const PokeListScreen({super.key});
@@ -65,7 +66,7 @@ class _PokeListScreenState extends ConsumerState<PokeListScreen> {
           );
         },
         error: (error, stack) {
-          return const Text("No pokemons today");
+          return Text(NetworkExceptionToMessageMapper.map(error));
         },
         loading: () {
           return const CircularProgressIndicator();
