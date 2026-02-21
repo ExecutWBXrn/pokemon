@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pokemon/shared/data/exceptions/cache_exception.dart';
 import 'package:pokemon/shared/domain/entities/pokemon_entity.dart';
-import 'package:pokemon/core/failure/cache_failure.dart';
 import 'package:pokemon/shared/providers/favorite_pokemon_provider.dart';
 
 class FavoritePokemons extends ConsumerWidget {
@@ -10,7 +10,7 @@ class FavoritePokemons extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final AsyncValue<List<PokemonEntity>> pokemonAsync = ref.watch(
-      favotiresStreamProvider,
+      favoritesStreamProvider,
     );
 
     return Center(
@@ -59,7 +59,7 @@ class FavoritePokemons extends ConsumerWidget {
         error: (e, s) {
           String message = "Error occurred!";
 
-          if (e is CacheFailure) {
+          if (e is CacheException) {
             message = e.message;
           }
 
@@ -68,7 +68,7 @@ class FavoritePokemons extends ConsumerWidget {
               Text(message),
               ElevatedButton(
                 onPressed: () {
-                  ref.invalidate(favotiresStreamProvider);
+                  ref.invalidate(favoritesStreamProvider);
                 },
                 child: Text("Press to refresh"),
               ),

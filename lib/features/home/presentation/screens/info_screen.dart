@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pokemon/shared/domain/entities/pokemon_entity.dart';
 import '../providers/poke_providers.dart';
 import 'package:pokemon/shared/providers/favorite_pokemon_provider.dart';
+import 'package:pokemon/shared/mappers/network_exception_to_message_mapper.dart';
 
 class InfoPage extends ConsumerWidget {
   const InfoPage({super.key});
@@ -81,7 +82,6 @@ class InfoPage extends ConsumerWidget {
               );
               pokemonAsync.when(
                 data: (dataFetched) {
-                  print("Data fetched");
                   if (dataFetched == null) {
                     return Center(
                       child: Text("Не вдалось завантажити дані про покемона"),
@@ -89,12 +89,8 @@ class InfoPage extends ConsumerWidget {
                   }
                   data = dataFetched;
                 },
-                error: (e, s) {
-                  print("Error fetching data");
-                },
-                loading: () {
-                  print("Trying to fetch data from API");
-                },
+                error: (e, s) {},
+                loading: () {},
               );
             }
 
@@ -237,8 +233,7 @@ class InfoPage extends ConsumerWidget {
             );
           },
           error: (error, s) {
-            print("Error: $error, $s");
-            return const Text("Some error occurred");
+            return Text(NetworkExceptionToMessageMapper.map(error));
           },
           loading: () {
             return CircularProgressIndicator();

@@ -9,5 +9,5 @@ abstract class FavoriteHiveLocalDs {
 
   Stream<List<Pokemon>> watchPokemon();
 
-  List<Pokemon> getinitialFavorites();
+  List<Pokemon> getInitialFavorites();
 }

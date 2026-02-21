@@ -23,13 +23,13 @@ final favoritePokeProvider = FutureProvider.family<PokemonEntity?, String>((
   return repository.getPokeName(id);
 });
 
-final favotiresStreamProvider = StreamProvider.autoDispose<List<PokemonEntity>>(
+final favoritesStreamProvider = StreamProvider.autoDispose<List<PokemonEntity>>(
   (ref) {
     final repository = ref.watch(favoriteRepositoryProvider);
 
     final controller = StreamController<List<PokemonEntity>>();
 
-    final initialData = repository.getinitialFavorites();
+    final initialData = repository.getInitialFavorites();
     controller.add(initialData);
 
     final subscription = repository.watchPokemon().listen((updatedList) {
