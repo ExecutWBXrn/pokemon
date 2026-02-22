@@ -20,6 +20,6 @@ final fetchAllPokemonsProvider = FutureProvider<List<PokemonEntity>>(
   (ref) => FetchAllPokemonsUseCase(ref.read(pokemonRepositoryProvider))(),
 );
 
-final fetchPokemonByIdProvider = FutureProvider.family<PokemonEntity?, String>(
+final fetchPokemonByIdProvider = FutureProvider.family<PokemonEntity?, int>(
   (ref, id) => FetchPokemonByIdUseCase(ref.read(pokemonRepositoryProvider))(id),
 );

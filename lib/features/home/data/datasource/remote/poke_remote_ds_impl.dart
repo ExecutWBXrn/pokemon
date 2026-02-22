@@ -31,7 +31,7 @@ class PokeRemoteDsImpl implements PokeRemoteDs {
   }
 
   @override
-  Future<Pokemon?> getPokemonById(String id) async {
+  Future<Pokemon?> getPokemonById(int id) async {
     try {
       final response = await _dioInstance.get('/$id');
 

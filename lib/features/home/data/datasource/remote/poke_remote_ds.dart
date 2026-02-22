@@ -2,5 +2,5 @@ import '/shared/data/models/pokemon.dart';
 
 abstract class PokeRemoteDs {
   Future<List<Pokemon>> getAllPokemons();
-  Future<Pokemon?> getPokemonById(String id);
+  Future<Pokemon?> getPokemonById(int id);
 }

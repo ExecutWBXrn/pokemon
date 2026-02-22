@@ -10,16 +10,16 @@ class FavoriteRepoImpl extends FavoriteRepo {
   FavoriteRepoImpl(this._localHiveDs);
 
   @override
-  Future<void> deletePokeName(String id) async {
+  Future<void> deletePokeName(PokemonEntity poke) async {
     try {
-      await _localHiveDs.deletePokeName(id);
+      await _localHiveDs.deletePokeName(Pokemon.fromEntity(poke));
     } on CacheException catch (e) {
       throw CacheException(e.message);
     }
   }
 
   @override
-  PokemonEntity? getPokeName(String id) {
+  PokemonEntity? getPokeName(int id) {
     try {
       final model = _localHiveDs.getPokeName(id);
       return model?.toEntity();

@@ -1,5 +1,5 @@
 class PokemonEntity {
-  final String id;
+  final int id;
   final String name;
   final String img;
   final String? bigImg;
@@ -18,7 +18,7 @@ class PokemonEntity {
   });
 
   PokemonEntity copyWith({
-    String? id,
+    int? id,
     String? name,
     String? img,
     String? bigImg,

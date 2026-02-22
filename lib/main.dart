@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:pokemon/features/home/presentation/screens/home_screen.dart';
 import 'package:pokemon/features/home/presentation/screens/info_screen.dart';
+import 'package:pokemon/shared/providers/notification_provider.dart';
 import '/shared/data/models/pokemon.dart';
+import 'package:pokemon/shared/data/services/notification_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,7 +15,17 @@ void main() async {
   Hive.registerAdapter(PokemonAdapter());
   await Hive.openBox<Pokemon>('poke_favorite');
 
-  runApp(ProviderScope(child: MaterialApplication()));
+  final notificationService = NotificationService();
+  await notificationService.initialize();
+
+  runApp(
+    ProviderScope(
+      overrides: [
+        notificationServiceProvider.overrideWithValue(notificationService),
+      ],
+      child: MaterialApplication(),
+    ),
+  );
 }
 
 class MaterialApplication extends ConsumerWidget {

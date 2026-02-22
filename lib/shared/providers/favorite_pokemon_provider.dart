@@ -6,16 +6,20 @@ import '/shared/domain/entities/pokemon_entity.dart';
 import '/shared/domain/repos/favorite_repo.dart';
 import '/shared/data/repos_impl/favorite_repo_impl.dart';
 import './box_provider.dart';
+import 'notification_provider.dart';
 
 final favoriteHiveDataSourceProvider = Provider<FavoriteHiveLocalDs>(
-  (ref) => FavoriteHiveLocalDsImpl(ref.read(boxProvider)),
+  (ref) => FavoriteHiveLocalDsImpl(
+    ref.read(boxProvider),
+    ref.read(notificationServiceProvider),
+  ),
 );
 
 final favoriteRepositoryProvider = Provider<FavoriteRepo>(
   (ref) => FavoriteRepoImpl(ref.read(favoriteHiveDataSourceProvider)),
 );
 
-final favoritePokeProvider = FutureProvider.family<PokemonEntity?, String>((
+final favoritePokeProvider = FutureProvider.family<PokemonEntity?, int>((
   ref,
   id,
 ) {

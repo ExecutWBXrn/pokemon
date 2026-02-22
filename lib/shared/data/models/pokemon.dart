@@ -7,7 +7,7 @@ part 'pokemon.g.dart';
 @HiveType(typeId: 0)
 class Pokemon {
   @HiveField(0)
-  final String id;
+  final int id;
   @HiveField(1)
   final String name;
   @HiveField(2)
@@ -32,7 +32,7 @@ class Pokemon {
   });
 
   Pokemon copyWith({
-    String? id,
+    int? id,
     String? name,
     String? img,
     String? bigImg,
@@ -53,7 +53,7 @@ class Pokemon {
 
   factory Pokemon.fromJson(Map<String, dynamic> json) {
     return Pokemon(
-      id: json['id'].toString(),
+      id: json['id'] as int,
       name: json['name'] as String,
       img: json['sprites']['front_default'] as String,
       bigImg:
@@ -66,7 +66,7 @@ class Pokemon {
 
   factory Pokemon.fromJsonById(Map<String, dynamic> json, int id) {
     return Pokemon(
-      id: id.toString(),
+      id: id,
       name: json['name'].toString().replaceAll("-", " "),
       img:
           "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$id.png",

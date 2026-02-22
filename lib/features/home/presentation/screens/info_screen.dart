@@ -4,6 +4,7 @@ import 'package:pokemon/shared/domain/entities/pokemon_entity.dart';
 import '../providers/poke_providers.dart';
 import 'package:pokemon/shared/providers/favorite_pokemon_provider.dart';
 import 'package:pokemon/shared/mappers/network_exception_to_message_mapper.dart';
+import '../providers/providers.dart';
 
 class InfoPage extends ConsumerWidget {
   const InfoPage({super.key});
@@ -21,7 +22,7 @@ class InfoPage extends ConsumerWidget {
       );
     }
 
-    final String? pokeId = args['pokeId'];
+    final int? pokeId = int.tryParse(args['pokeId']!);
     final String? pageFrom = args['pageFrom'];
 
     if (pokeId == null) {
@@ -163,13 +164,13 @@ class InfoPage extends ConsumerWidget {
                             IconButton(
                               onPressed: () {
                                 if (data!.isFavorite) {
-                                  favoriteNotifier.deletePokeName(data!.id);
+                                  favoriteNotifier.deletePokeName(data!);
                                 } else {
                                   favoriteNotifier.savePokeName(
                                     data!.copyWith(isFavorite: true),
                                   );
                                 }
-                                ref.refresh(favoritePokeProvider(data!.id));
+                                ref.invalidate(favoritePokeProvider(data!.id));
                                 if (context.mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(

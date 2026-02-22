@@ -5,7 +5,7 @@ class FetchPokemonByIdUseCase {
   final PokemonRepo _repo;
   FetchPokemonByIdUseCase(this._repo);
 
-  Future<PokemonEntity?> call(String id) async {
+  Future<PokemonEntity?> call(int id) async {
     return await _repo.getPokemonById(id);
   }
 }
