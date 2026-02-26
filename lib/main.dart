@@ -1,8 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:pokemon/features/home/presentation/screens/home_screen.dart';
-import 'package:pokemon/features/home/presentation/screens/info_screen.dart';
+import 'package:pokemon/core/routes/routes.dart';
 import 'package:pokemon/shared/providers/notification_provider.dart';
 import '/shared/data/models/pokemon.dart';
 import 'package:pokemon/shared/data/services/notification_service.dart';
@@ -33,9 +32,6 @@ class MaterialApplication extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return MaterialApp(
-      initialRoute: '/',
-      routes: {'/': (context) => HomePage(), '/info': (context) => InfoPage()},
-    );
+    return MaterialApp(initialRoute: '/', routes: ref.read(routerProvider));
   }
 }

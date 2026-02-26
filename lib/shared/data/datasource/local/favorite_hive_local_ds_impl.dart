@@ -14,11 +14,6 @@ class FavoriteHiveLocalDsImpl extends FavoriteHiveLocalDs {
   Future<void> deletePokeName(Pokemon poke) async {
     try {
       await _box.delete("pokemon_${poke.id}");
-      await _notificationService.showNotification(
-        poke.id,
-        title: poke.name,
-        body: "Removed from favorites",
-      );
     } on HiveError catch (e) {
       throw CacheException(e.message);
     } catch (e, st) {
@@ -52,11 +47,6 @@ class FavoriteHiveLocalDsImpl extends FavoriteHiveLocalDs {
   Future<void> savePokeName(Pokemon poke) async {
     try {
       await _box.put("pokemon_${poke.id}", poke);
-      await _notificationService.showNotification(
-        poke.id,
-        title: poke.name,
-        body: "Added to favorites",
-      );
     } on HiveError catch (e) {
       throw CacheException(e.message);
     } catch (e, st) {

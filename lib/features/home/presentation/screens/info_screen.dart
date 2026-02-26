@@ -4,7 +4,6 @@ import 'package:pokemon/shared/domain/entities/pokemon_entity.dart';
 import '../providers/poke_providers.dart';
 import 'package:pokemon/shared/providers/favorite_pokemon_provider.dart';
 import 'package:pokemon/shared/mappers/network_exception_to_message_mapper.dart';
-import '../providers/providers.dart';
 
 class InfoPage extends ConsumerWidget {
   const InfoPage({super.key});
@@ -56,8 +55,6 @@ class InfoPage extends ConsumerWidget {
     final AsyncValue<PokemonEntity?> asyncHivePokemon = ref.watch(
       favoritePokeProvider(pokeId),
     );
-
-    final favoriteNotifier = ref.read(favoriteRepositoryProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -164,11 +161,13 @@ class InfoPage extends ConsumerWidget {
                             IconButton(
                               onPressed: () {
                                 if (data!.isFavorite) {
-                                  favoriteNotifier.deletePokeName(data!);
+                                  ref.read(
+                                    removeFromFavoriteAndNotifyUseCaseProvider,
+                                  )(data!.copyWith(isFavorite: false));
                                 } else {
-                                  favoriteNotifier.savePokeName(
-                                    data!.copyWith(isFavorite: true),
-                                  );
+                                  ref.read(
+                                    addToFavoriteAndNotifyUseCaseProvider,
+                                  )(data!.copyWith(isFavorite: true));
                                 }
                                 ref.invalidate(favoritePokeProvider(data!.id));
                                 if (context.mounted) {
