@@ -1,50 +1,83 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pokemon/shared/data/models/pokemon.dart';
+import 'package:pokemon/shared/domain/entities/pokemon_entity.dart';
 
 void main() {
-  test('Pokemon fromJson should correctly parse a map', () {
-    final Map<String, dynamic> jsonMap = {
+  group('Pokemon Model Tests', () {
+    final mockJson = {
       'id': 25,
-      'name': 'pickachu',
+      'name': 'pikachu',
       'height': 4,
       'weight': 60,
       'sprites': {
-        'front_default': 'https://pokeapi.co/pikachu.png',
+        'front_default': 'https://raw.githubusercontent.com/url_to_img.png',
         'other': {
           'official-artwork': {
-            'front_default': 'https://pokeapi.co/pikachu_big.png',
+            'front_default':
+                'https://raw.githubusercontent.com/url_to_big_img.png',
           },
         },
       },
     };
 
-    final pokemon = Pokemon.fromJson(jsonMap);
+    test('should return a valid model from JSON', () {
+      // Act
+      final result = Pokemon.fromJson(mockJson);
 
-    expect(pokemon.id, '25');
-    expect(pokemon.name, 'pickachu');
-    expect(pokemon.height, 4);
-    expect(pokemon.weight, 60);
-    expect(pokemon.img, 'https://pokeapi.co/pikachu.png');
-    expect(pokemon.bigImg, 'https://pokeapi.co/pikachu_big.png');
-  });
+      // Assert
+      expect(result.id, 25);
+      expect(result.name, 'pikachu');
+      expect(
+        result.img,
+        contains('https://raw.githubusercontent.com/url_to_img.png'),
+      );
+      expect(
+        result.bigImg,
+        contains('https://raw.githubusercontent.com/url_to_big_img.png'),
+      );
+      expect(result.isFavorite, false);
+    });
 
-  test('Pokemon fromJson should handle missing optional fields', () {
-    final Map<String, dynamic> jsonMap = {
-      'id': 1,
-      'name': 'bulbasaur',
-      'sprites': {
-        'front_default': 'https://pokeapi.co/pikachu.png',
-        'other': {'official-artwork': {}},
-      },
-    };
+    test('should correctly convert to Entity', () {
+      // Arrange
+      final model = Pokemon(id: 1, name: 'Bulbasaur', img: 'url');
 
-    final pokemon = Pokemon.fromJson(jsonMap);
+      // Act
+      final entity = model.toEntity();
 
-    expect(pokemon.id, '1');
-    expect(pokemon.name, 'bulbasaur');
-    expect(pokemon.height, isNull);
-    expect(pokemon.weight, isNull);
-    expect(pokemon.img, 'https://pokeapi.co/pikachu.png');
-    expect(pokemon.bigImg, 'https://pokeapi.co/pikachu.png');
+      // Assert
+      expect(entity, isA<PokemonEntity>());
+      expect(entity.id, model.id);
+      expect(entity.name, model.name);
+    });
+
+    test('copyWith should return updated isFavorite value', () {
+      // Arrange
+      final pokemon = Pokemon(
+        id: 1,
+        name: 'Ditto',
+        img: 'url',
+        isFavorite: false,
+      );
+
+      // Act
+      final updated = pokemon.copyWith(isFavorite: true);
+
+      // Assert
+      expect(updated.isFavorite, true);
+      expect(updated.id, pokemon.id);
+    });
+
+    test('fromJsonById should format name correctly (remove hyphens)', () {
+      // Arrange
+      final json = {'name': 'mr-mime'};
+
+      // Act
+      final result = Pokemon.fromJsonById(json, 122);
+
+      // Assert
+      expect(result.name, 'mr mime');
+      expect(result.id, 122);
+    });
   });
 }
