@@ -21,7 +21,7 @@ class InfoPage extends ConsumerWidget {
       );
     }
 
-    final String? pokeId = args['pokeId'];
+    final int? pokeId = int.tryParse(args['pokeId']!);
     final String? pageFrom = args['pageFrom'];
 
     if (pokeId == null) {
@@ -55,8 +55,6 @@ class InfoPage extends ConsumerWidget {
     final AsyncValue<PokemonEntity?> asyncHivePokemon = ref.watch(
       favoritePokeProvider(pokeId),
     );
-
-    final favoriteNotifier = ref.read(favoriteRepositoryProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -163,13 +161,15 @@ class InfoPage extends ConsumerWidget {
                             IconButton(
                               onPressed: () {
                                 if (data!.isFavorite) {
-                                  favoriteNotifier.deletePokeName(data!.id);
+                                  ref.read(
+                                    removeFromFavoriteAndNotifyUseCaseProvider,
+                                  )(data!.copyWith(isFavorite: false));
                                 } else {
-                                  favoriteNotifier.savePokeName(
-                                    data!.copyWith(isFavorite: true),
-                                  );
+                                  ref.read(
+                                    addToFavoriteAndNotifyUseCaseProvider,
+                                  )(data!.copyWith(isFavorite: true));
                                 }
-                                ref.refresh(favoritePokeProvider(data!.id));
+                                ref.invalidate(favoritePokeProvider(data!.id));
                                 if (context.mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(

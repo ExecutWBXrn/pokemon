@@ -46,7 +46,7 @@ class FavoritePokemons extends ConsumerWidget {
                       context,
                       '/info',
                       arguments: <String, String>{
-                        'pokeId': pokemons[index].id,
+                        'pokeId': pokemons[index].id.toString(),
                         'pageFrom': 'flist',
                       },
                     );

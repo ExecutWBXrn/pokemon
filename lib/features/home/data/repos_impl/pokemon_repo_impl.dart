@@ -25,7 +25,7 @@ class PokemonRepoImpl implements PokemonRepo {
   }
 
   @override
-  Future<PokemonEntity?> getPokemonById(String id) async {
+  Future<PokemonEntity?> getPokemonById(int id) async {
     try {
       final pokeModel = await _remoteDs.getPokemonById(id);
       return pokeModel?.toEntity();

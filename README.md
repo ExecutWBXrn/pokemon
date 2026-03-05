@@ -19,4 +19,4 @@
 
 ### Architecture (feature-based):
 
-![img_1.png](img_1.png)
+<img width="498" height="1102" alt="image" src="https://github.com/user-attachments/assets/fc4a4a36-3ed3-4917-b584-af628c70f658" />

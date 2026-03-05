@@ -56,7 +56,7 @@ class _PokeListScreenState extends ConsumerState<PokeListScreen> {
                     context,
                     '/info',
                     arguments: <String, String>{
-                      'pokeId': allPokemonList.value![index].id,
+                      'pokeId': allPokemonList.value![index].id.toString(),
                       'pageFrom': 'plist',
                     },
                   );

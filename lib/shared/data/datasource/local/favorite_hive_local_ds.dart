@@ -3,9 +3,9 @@ import '../../models/pokemon.dart';
 abstract class FavoriteHiveLocalDs {
   Future<void> savePokeName(Pokemon poke);
 
-  Pokemon? getPokeName(String id);
+  Pokemon? getPokeName(int id);
 
-  Future<void> deletePokeName(String id);
+  Future<void> deletePokeName(Pokemon poke);
 
   Stream<List<Pokemon>> watchPokemon();
 
